@@ -11,41 +11,83 @@ struct SecondView: View {
     @StateObject private var goalModel = GoalModel()
 
     var body: some View {
-        TabView {
-            NavigationStack {
-                ExploreView()
-            }
-            .tabItem {
-                Label("Explore", systemImage: "magnifyingglass")
-            }
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("FiRiLi MVP")
+                            .font(.largeTitle)
+                            .bold()
+                        Text("One place to explore, plan, and track healthier choices.")
+                            .foregroundColor(.secondary)
+                    }
 
-            NavigationStack {
-                MealPlanCreator()
-            }
-            .tabItem {
-                Label("Meals", systemImage: "leaf")
-            }
+                    FeatureCard(title: "Explore", subtitle: "Browse groceries, eating out ideas, and recipes.", systemImage: "magnifyingglass") {
+                        ExploreView()
+                    }
 
-            NavigationStack {
-                WorkoutPlanView()
-            }
-            .tabItem {
-                Label("Workout", systemImage: "figure.walk")
-            }
+                    FeatureCard(title: "Meal Planning", subtitle: "Quickly assemble meals from our samples.", systemImage: "leaf") {
+                        MealPlanCreator()
+                    }
 
-            NavigationStack {
-                CalculatorView(goalModel: goalModel)
-            }
-            .tabItem {
-                Label("EPQ", systemImage: "number")
-            }
+                    FeatureCard(title: "Workout Ideas", subtitle: "Pick a simple plan to stay active.", systemImage: "figure.walk") {
+                        WorkoutPlanView()
+                    }
 
-            NavigationStack {
-                ProfileView(goalModel: goalModel)
+                    FeatureCard(title: "EPQ Calculator", subtitle: "Set your energy-protein goal for the day.", systemImage: "number") {
+                        CalculatorView(goalModel: goalModel)
+                    }
+
+                    FeatureCard(title: "Profile", subtitle: "See your goal and a quick status snapshot.", systemImage: "person.circle") {
+                        ProfileView(goalModel: goalModel)
+                    }
+                }
+                .padding()
             }
-            .tabItem {
-                Label("Profile", systemImage: "person.circle")
+            .navigationTitle("Home")
+        }
+    }
+}
+
+struct FeatureCard<Destination: View>: View {
+    let title: String
+    let subtitle: String
+    let systemImage: String
+    @ViewBuilder var destination: Destination
+
+    var body: some View {
+        NavigationLink {
+            destination
+        } label: {
+            HStack(alignment: .top, spacing: 12) {
+                Image(systemName: systemImage)
+                    .font(.title2)
+                    .foregroundColor(.green)
+                    .frame(width: 32)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                    Text(subtitle)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .foregroundColor(.secondary)
             }
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .fill(Color(.systemBackground))
+                    )
+            )
         }
     }
 }

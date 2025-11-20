@@ -1,12 +1,12 @@
 # MVPFirili
 
-An experimental SwiftUI MVP for exploring energy-protein (EPQ/EPI) friendly foods.
+A lightweight SwiftUI MVP that puts the core FiRiLi ideas into one place.
 
 ## Features
-- Landing screen that routes to the main experience via "Continue as Guest".
-- Tab-based navigation for Explore, Meal Plan builder, Workout ideas, EPQ calculator, and Profile.
+- Landing screen with a single "Continue as Guest" path into the app.
+- Simple home hub with cards to Explore, Meal Planning, Workout Ideas, EPQ Calculator, and Profile.
 - Explore page with EPI filtering that links to grocery items, eating out ideas, and recipes.
-- Calculator that sets a shared EPQ goal shown on the Profile tab.
+- Calculator sets a shared EPQ goal that also appears on the Profile view.
 
 ## Getting Started
 Open the project in Xcode 15+, select an iOS simulator, and run the app. The app uses in-memory sample data from `DataBaseGroceries.swift`.
