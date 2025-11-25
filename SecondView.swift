@@ -8,78 +8,86 @@
 import SwiftUI
 
 struct SecondView: View {
-    @State private var selectedPage = "Explore"
-    @StateObject private var goalModel = GoalModel() // Create shared state object
+    @StateObject private var goalModel = GoalModel()
 
     var body: some View {
-        NavigationView {
-            VStack {
-                if selectedPage == "Explore" {
-                    ExploreView() // Display the Explore view
-                } else if selectedPage == "Profile" {
-                    ProfileView(goalModel: goalModel) // Pass shared state
-                } else if selectedPage == "Meal Plan" {
-                    MealPlanCreator() // Display the Meal Plan view
-                } else if selectedPage == "Calculator" {
-                    CalculatorView(goalModel: goalModel) // Pass shared state
-                } else if selectedPage == "Workout Plan" {
-                    WorkoutPlanView() // Display the Workout Plan view
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("FiRiLi MVP")
+                            .font(.largeTitle)
+                            .bold()
+                        Text("One place to explore, plan, and track healthier choices.")
+                            .foregroundColor(.secondary)
+                    }
+
+                    FeatureCard(title: "Explore", subtitle: "Browse groceries, eating out ideas, and recipes.", systemImage: "magnifyingglass") {
+                        ExploreView()
+                    }
+
+                    FeatureCard(title: "Meal Planning", subtitle: "Quickly assemble meals from our samples.", systemImage: "leaf") {
+                        MealPlanCreator()
+                    }
+
+                    FeatureCard(title: "Workout Ideas", subtitle: "Pick a simple plan to stay active.", systemImage: "figure.walk") {
+                        WorkoutPlanView()
+                    }
+
+                    FeatureCard(title: "EPQ Calculator", subtitle: "Set your energy-protein goal for the day.", systemImage: "number") {
+                        CalculatorView(goalModel: goalModel)
+                    }
+
+                    FeatureCard(title: "Profile", subtitle: "See your goal and a quick status snapshot.", systemImage: "person.circle") {
+                        ProfileView(goalModel: goalModel)
+                    }
+                }
+                .padding()
+            }
+            .navigationTitle("Home")
+        }
+    }
+}
+
+struct FeatureCard<Destination: View>: View {
+    let title: String
+    let subtitle: String
+    let systemImage: String
+    @ViewBuilder var destination: Destination
+
+    var body: some View {
+        NavigationLink {
+            destination
+        } label: {
+            HStack(alignment: .top, spacing: 12) {
+                Image(systemName: systemImage)
+                    .font(.title2)
+                    .foregroundColor(.green)
+                    .frame(width: 32)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                    Text(subtitle)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
                 }
 
                 Spacer()
+
+                Image(systemName: "chevron.right")
+                    .foregroundColor(.secondary)
             }
-            .toolbar {
-                ToolbarItemGroup(placement: .bottomBar) {
-                    Button(action: {
-                        selectedPage = "Explore"
-                    }) {
-                        VStack {
-                            Image(systemName: "magnifyingglass")
-                            Text("Explore")
-                                .fontWeight(selectedPage == "Explore" ? .bold : .regular)
-                        }
-                    }
-                    Button(action: {
-                        selectedPage = "Profile"
-                    }) {
-                        VStack {
-                            Image(systemName: "person.circle")
-                            Text("Profile")
-                                .fontWeight(selectedPage == "Profile" ? .bold : .regular)
-                        }
-                    }
-                    Button(action: {
-                        selectedPage = "Meal Plan"
-                    }) {
-                        VStack {
-                            Image(systemName: "leaf")
-                            Text("Meals")
-                                .fontWeight(selectedPage == "Meal Plan" ? .bold : .regular)
-                        }
-                    }
-                    
-                    Button(action: {
-                        selectedPage = "Workout Plan"
-                    }) {
-                        VStack {
-                            Image(systemName: "figure.walk")
-                            Text("Workout")
-                                .fontWeight(selectedPage == "Workout Plan" ? .bold : .regular)
-                        }
-                    }
-                    
-                    Button(action: {
-                        selectedPage = "Calculator"
-                    }) {
-                        VStack {
-                            Image(systemName: "number")
-                            Text("EPQ")
-                                .fontWeight(selectedPage == "Calculator" ? .bold : .regular)
-                        }
-                    }
-                    
-                }
-            }
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .fill(Color(.systemBackground))
+                    )
+            )
         }
     }
 }
